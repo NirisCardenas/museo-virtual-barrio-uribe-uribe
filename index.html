@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Museo del Barrio - Sincelejo</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    background: #05060a;
+    color: #fff;
+}
+
+/* SECCIONES GENERALES */
+.full-section {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+    padding: 20px;
+    position: relative;
+    transition: all 0.8s ease;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+/* PORTADA */
+#portada {
+    opacity: 1;
+    transform: translateY(0);
+    background: url('portada.png') no-repeat center center;
+    background-size: cover;
+    position: relative;
+}
+
+#portada .overlay-portada {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.25);
+    backdrop-filter: blur(1px);
+    z-index: 1;
+}
+
+/* FONDOS ORIGINALES */
+#historia {
+    background: url('Fondo seccion 2.JPEG') no-repeat center center;
+    background-size: cover;
+    image-rendering: auto;
+    position: relative;
+}
+
+#territorio {
+    background: radial-gradient(circle at top, #2c3e50 0%, #05060a 70%);
+}
+
+#lugares {
+    background: radial-gradient(circle at top, #8e44ad 0%, #1b0f2a 60%, #05060a 100%);
+}
+
+#simbolo {
+    background: radial-gradient(circle at top, #c0392b 0%, #2c0b0b 60%, #05060a 100%);
+}
+
+#tradicion {
+    background: radial-gradient(circle at top, #d35400 0%, #2b1404 60%, #05060a 100%);
+}
+
+#actores {
+    background: radial-gradient(circle at top, #16a085 0%, #03201c 60%, #05060a 100%);
+}
+
+#recursos {
+    background: radial-gradient(circle at top, #2980b9 0%, #061624 60%, #05060a 100%);
+}
+
+#historia-comunidad {
+    background: radial-gradient(circle at top, #9b59b6 0%, #1c1030 60%, #05060a 100%);
+}
+
+#problemas {
+    background: radial-gradient(circle at top, #e74c3c 0%, #2b0b0b 60%, #05060a 100%);
+}
+
+#gestos {
+    background: radial-gradient(circle at top, #27ae60 0%, #062012 60%, #05060a 100%);
+}
+
+#esperanza {
+    background: radial-gradient(circle at top, #f1c40f 0%, #3b2b05 60%, #05060a 100%);
+}
+
+/* OVERLAY GENERAL (SECCIONES 3–12) */
+.overlay {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.75) 60%);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(2px);
+}
+
+/* OVERLAY SUAVE SOLO PARA SECCIÓN 2 */
+#historia .overlay {
+    background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, rgba(0,0,0,0.35) 60%);
+    backdrop-filter: none;
+}
+
+/* CONTENIDO */
+.content {
+    position: relative;
+    z-index: 2;
+    max-width: 900px;
+}
+
+h1, h2 {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    font-weight: 300;
+    letter-spacing: 1px;
+}
+
+p {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    line-height: 1.7;
+    margin-bottom: 30px;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    color: #f5f5f5;
+}
+
+/* BOTONES */
+button {
+    padding: 15px 40px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 50px;
+    background: linear-gradient(45deg, #e67e22, #f39c12);
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 25px rgba(230, 126, 34, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    background: linear-gradient(45deg, #d35400, #e67e22);
+    transform: translateY(-3px);
+}
+
+/* BOTÓN PORTADA */
+.hero-btn {
+    position: absolute;
+    bottom: 100px;
+    left: 48%;
+    transform: translateX(-50%);
+    font-size: 1.4em;
+    padding: 20px 50px;
+    z-index: 3;
+}
+
+/* BARRA DE PROGRESO */
+.progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 4px;
+    background: linear-gradient(90deg, #e67e22, #f39c12);
+    z-index: 1001;
+}
+
+/* NAVEGACIÓN FLOTANTE */
+.nav-float {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.nav-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: rgba(15, 15, 25, 0.9);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: white;
+    font-size: 1.3em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-btn:hover {
+    background: #e67e22;
+    transform: scale(1.08);
+}
+
+/* SECCIÓN 2 — NUEVO DISEÑO */
+.titulo-historia {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+.texto-historia {
+    position: absolute;
+    bottom: 70px;
+    width: 80%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1.3rem;
+    line-height: 1.6;
+    font-weight: 300;
+    color: #f5f5f5;
+}
+
+.boton-historia {
+    position: absolute;
+    bottom: 40px;
+    right: 40px;
+}
+
+/* ANIMACIÓN */
+.section-visible {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+</style>
+</head>
+
+<body>
+
+<div class="progress" id="progress"></div>
+
+<div class="nav-float">
+    <button class="nav-btn" onclick="scrollToTop()">🏠</button>
+    <button class="nav-btn" onclick="scrollToSection('historia')">📜</button>
+    <button class="nav-btn" onclick="scrollToSection('territorio')">🌎</button>
+    <button class="nav-btn" onclick="scrollToSection('problemas')">⚠️</button>
+    <button class="nav-btn" onclick="scrollToSection('esperanza')">✨</button>
+</div>
+
+<!-- 1. PORTADA -->
+<section id="portada" class="full-section section-visible">
+    <div class="overlay-portada"></div>
+    <div class="content"></div>
+    <button class="hero-btn" onclick="scrollToSection('historia')">Comenzar recorrido</button>
+</section>
+
+<!-- 2. HISTORIA (NUEVA) -->
+<section id="historia" class="full-section">
+    <div class="overlay"></div>
+
+    <h2 class="titulo-historia">📜 Historia del Barrio</h2>
+
+    <p class="texto-historia">
+        El barrio Uribe Uribe es uno de los barrios tradicionales más grandes de la ciudad de Sincelejo,
+        que destaca por su cultura, tradiciones y gente trabajadora. Acompáñame a un viaje por los lugares
+        más conocidos de este sector...
+    </p>
+
+    <button class="boton-historia" onclick="scrollToSection('territorio')">
+        Siguiente: Territorio →
+    </button>
+</section>
+
+<!-- 3. TERRITORIO -->
+<section id="territorio" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        El Territorio
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 3 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 120px;
+        z-index: 2;
+    ">
+
+      
+        <!-- IMAGEN 3 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="imagen 3 seccion 3.jpeg" alt="Cendes" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Cendes:</strong> 2026. Esta fundación funciona desde hace muchos años, convirtiéndose en una especie de salón. Actualmente funciona para atender a adultos mayores y niños de otra fundación.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('lugares')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente: Lugares de encuentro →
+    </button>
+
+</section>
+
+
+<!-- 4. LUGARES DE ENCUENTRO -->
+<section id="lugares" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Lugares de Encuentro
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 3 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 120px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="tienda.jpg" alt="Tienda" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Tienda:</strong> 2026. Esta tienda funciona desde hace aproximadamente 25 años y es un referente del barrio como punto de encuentro.
+            </p>
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="iglesia.jpg" alt="Iglesia" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Iglesia:</strong> desde el año 2015 esta iglesia se ha convertido en un lugar de referencia en el barrio.
+            </p>
+        </div>
+
+        <!-- IMAGEN 3 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="estadero.jpg" alt="Estadero" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Estadero:</strong> este lugar hace parte de los puntos estratégicos del barrio y es conocido por muchas personas de la ciudad.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('simbolo')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente: Símbolo de identidad →
+    </button>
+
+</section>
+
+<!-- 5. UN SÍMBOLO DE IDENTIDAD -->
+<section id="simbolo-identidad" class="full-section" style="
+    background: radial-gradient(circle at top, #b34700 0%, #2b1404 60%, #05060a 100%);
+">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Un símbolo de identidad
+    </h2>
+
+    <!-- IMAGEN CENTRAL -->
+    <div style="
+        width: 40%;
+        margin-top: 140px;
+        text-align: center;
+        z-index: 2;
+    ">
+        <img src="imagen 1 seccion 5.jpg" alt="Artesanías" style="width: 100%; border-radius: 10px;">
+        <p style="margin-top: 15px;">
+            <strong>Artesanías:</strong> 2026. Pedro es una de las personas que empezó a trabajar en Sincelejo las artesanías con cerámica a base de arcilla desde hace 17 años.
+        </p>
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('tradicion')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente: Tradición →
+    </button>
+
+</section>
+
+
+<!-- 6. TRADICIÓN O PRÁCTICA CULTURAL -->
+<section id="tradicion" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Tradición o práctica cultural
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 3 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 120px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="fritos de la esquina.jpg" alt="Fritos de la esquina" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Fritos de la esquina:</strong> este puesto de fritos funciona desde hace 12 años y ya ha crecido bastante desde su fundación y es el puesto más conocido en todo el barrio.
+            </p>
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="pasteles.jpg" alt="Pasteles" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Pasteles:</strong> este es un negocio familiar que funcionó durante 2 años y que los hacían en la plazoleta del barrio.
+            </p>
+        </div>
+
+        <!-- IMAGEN 3 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="grupo de baile.jpg" alt="Grupo de baile" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Grupo de baile:</strong> esta es la comparsa del barrio y han sido ganadores de varios premios por su gran talento.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('actores')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente: Actores comunitarios →
+    </button>
+
+</section>
+
+
+<!-- 8. RECURSOS COMUNITARIOS -->
+<section id="recursos" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Recursos comunitarios
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 3 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 120px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="colegio.jpg" alt="Colegio" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Colegio:</strong> primaria de La Unión. Es un colegio que existe desde hace casi 20 años y brinda su espacio a niños de toda la comunidad y barrios aledaños.
+            </p>
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="centro de salud.jpg" alt="Centro de salud" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Centro de salud:</strong> ya no se encuentra en funcionamiento para atender a pacientes por cuestiones de salud, pero aquí se reúnen madres gestantes y lactantes para recibir charlas y capacitaciones.
+            </p>
+        </div>
+
+        <!-- IMAGEN 3 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="fundacion.jpg" alt="Fundación " style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Fundación de cendes:</strong> aquí se atienden a niños sobre todo pertenecientes al colegio La Unión, donde se fortalecen capacidades de arte, lectura y escritura.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('memorias')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente: Memorias →
+    </button>
+
+</section>
+
+
+<!-- 9. HISTORIA DE LA COMUNIDAD -->
+<section id="historia" class="full-section" style="
+    background: radial-gradient(circle at top, #4b2e0f 0%, #1a0f05 60%, #000000 100%);
+">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Historia de la comunidad
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 2 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 60px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 140px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 40%; text-align: center;">
+            <img src="antes casa señor.jpg" alt="Casa antigua" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px; font-size: 0.85rem;">
+    <strong>Casa antigua del señor que vende chanclas:</strong> esta casa funcionaba como un emprendimiento de un señor mayor de edad, lastimosamente sufrió un incendio y tuvo que ser reconstruida.
+</p>
+
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 40%; text-align: center;">
+            <img src="actual casa señor.jpg" alt="Casa actual" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Ahora</strong>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('siguiente')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente →
+    </button>
+
+</section>
+
+
+
+<!-- 10. PROBLEMAS COMUNITARIOS -->
+<section id="problemas" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Problemas comunitarios
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 2 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 60px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 140px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 40%; text-align: center;">
+            <img src="basurero y arroyo.jpg" alt="Basurero y arroyo" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px; font-size: 0.95rem;">
+                <strong>Basurero y arroyo:</strong> este arroyo atraviesa toda la ciudad y pasa por el relleno sanitario y trae consigo basuras que afectan a la comunidad cuando llueve.
+            </p>
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 40%; text-align: center;">
+            <img src="calles dañadas.jpg" alt="Calles dañadas" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px; font-size: 0.95rem;">
+    <strong>Calles dañadas:</strong> la falta de infraestructura se convierte en un problema a la hora de transitar cuando las calles están mojadas y llenas de barro.
+</p>
+
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('siguiente')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente →
+    </button>
+
+</section>
+
+<!-- GESTOS SOLIDARIOS -->
+<section id="gestos" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Gestos solidarios
+    </h2>
+
+    <!-- CONTENEDOR DE LAS 3 IMÁGENES -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 40px;
+        width: 90%;
+        max-width: 1200px;
+        margin-top: 120px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN 1 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="vecinos conversando.jpg" alt="Vecinos conversando" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Vecinos conversando:</strong> estos señores se dedican al mototaxismo y se reúnen periódicamente en esta esquina a hablar y compartir.
+            </p>
+        </div>
+
+        <!-- IMAGEN 2 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="actividades comunitarias.jpg" alt="Actividades comunitarias" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Actividades comunitarias:</strong> en esta calle del sector es tradición decorarla en diciembre y se convierte en un espacio de esparcimiento para vecinos y visitantes.
+            </p>
+        </div>
+
+        <!-- IMAGEN 3 -->
+        <div style="width: 30%; text-align: center;">
+            <img src="personas apoyandose.jpg" alt="Personas apoyándose" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Personas apoyándose:</strong> anteriormente el barrio se inundaba con frecuencia cuando llovía fuerte y los vecinos se convertían en una sola familia para apoyarse en esa situación difícil.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('siguiente')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente →
+    </button>
+
+</section>
+
+
+<!-- IMÁGENES DE ESPERANZA -->
+<section id="esperanza" class="full-section">
+    <div class="overlay"></div>
+
+    <!-- TÍTULO ARRIBA IZQUIERDA -->
+    <h2 style="
+        position: absolute;
+        top: 40px;
+        left: 40px;
+        font-size: 2rem;
+        font-weight: 300;
+        text-shadow: 2px 2px 6px rgba(0,0,0,0.9);
+    ">
+        Imágenes de esperanza
+    </h2>
+
+    <!-- CONTENEDOR DE LA IMAGEN ÚNICA -->
+    <div style="
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        width: 90%;
+        max-width: 900px;
+        margin-top: 140px;
+        z-index: 2;
+    ">
+
+        <!-- IMAGEN -->
+        <div style="width: 60%; text-align: center;">
+            <img src="niños estudiando.jpg" alt="Niños estudiando" style="width: 100%; border-radius: 10px;">
+            <p style="margin-top: 15px;">
+                <strong>Niños jugando:</strong> los niños de esta comunidad siempre van con la mejor actitud a estudiad al colegio.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- BOTÓN ABAJO DERECHA -->
+    <button onclick="scrollToSection('siguiente')" style="
+        position: absolute;
+        bottom: 40px;
+        right: 40px;
+    ">
+        Siguiente →
+    </button>
+
+</section>
+
+
+<script>
+function scrollToSection(sectionId) {
+    document.getElementById(sectionId).scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
+    document.getElementById('progress').style.width = progress + '%';
+});
+
+/* ANIMACIÓN */
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('section-visible');
+        }
+    });
+}, { threshold: 0.25 });
+
+document.querySelectorAll('.full-section').forEach(section => {
+    if (section.id !== 'portada') observer.observe(section);
+});
+</script>
+
+</body>
+</html>
